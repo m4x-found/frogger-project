@@ -109,11 +109,14 @@ def spawnRoadObject():
 		availableData[0] = "RIGHT"
 		availableData[1] = 0
 	
+	if rowFreeFinal:
+		availableData[0] = "RIGHT"
+		availableData[1] = rowFreeFinal
+	
 	if availableData[0] != "NIL":
-		print("NEw")
 		randomisedIndex = random.randint(0, 2)
 		initialX = 0
-		initialY = availableData[1]
+		initialY = rowFreeFinal or availableData[1]
 		targetObject = "Car"
 		if randomisedIndex == 0:
 			targetObject = "Car"
@@ -154,6 +157,10 @@ def handleObjectTick():
 	currentRoadObjectsLen = len(gameData["Obstructions"])
 	if currentRoadObjectsLen < 7:
 		spawnRoadObject()
+	
+	for objectValue in gameData["Obstructions"]:
+		#mainWindow.blit()
+		print("Vals")
 		
 #str var1 << "";
 #std::cin >> var1;
