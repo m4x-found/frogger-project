@@ -29,7 +29,12 @@ gameData = {
 
 	},
 	
-"Obstructions": [],
+"Obstructions": {
+"RoadOne": [["Car", ]],
+"RoadTwo": [],
+"RoadThree": [],
+"RoadFour": []
+},
 "RiverObjects": []
 }
 
@@ -72,8 +77,9 @@ def rightKeyEnabled():
 def upKeyEnabled():
 	if gameData["PositionData"]["PlayerPosition"][1] > 15:
 		gameData["PositionData"]["PlayerPosition"][1] -= 2
-	
-def spawnRoadObject():
+
+'''	
+def spawnRoadObject(): # Re code for left direction only --> Function now defunct objects preloaded into arrays
 	# Find available road
 	availableData = ["NIL", "NIL"]
 	objectFound = False
@@ -89,41 +95,11 @@ def spawnRoadObject():
 			rowFreeArray[2] == "USED"
 		elif obstructionArray["RoadNumber"] == 3:
 			rowFreeArray[3] == "USED"
-			
-	for rowNum in rowFreeArray:
-		if rowNum != "USED":
-			rowFreeFinal = rowNum
-	
-	for objectValue in gameData["Obstructions"]:
-		objectFound = True
-		if objectValue["Direction"] == "RIGHT":
-			if objectValue["Position"][0] > 75:
-				availableData[0] = "RIGHT"
-				availableData[1] = objectValue["RoadNumber"]
-		elif objectValue["Direction"] == "LEFT":
-			if objectValue["Position"][1] < 325:
-				availableData[0] = "LEFT"
-				availableData[1] = objectValue["RoadNumber"]
-	
-	if objectFound == False:
-		availableData[0] = "RIGHT"
-		availableData[1] = 0
-	
-	if rowFreeFinal:
-		availableData[0] = "RIGHT"
-		availableData[1] = rowFreeFinal
 	
 	if availableData[0] != "NIL":
 		randomisedIndex = random.randint(0, 2)
 		initialX = 0
-		initialY = rowFreeFinal or availableData[1]
 		targetObject = "Car"
-		if randomisedIndex == 0:
-			targetObject = "Car"
-		elif randomisedIndex == 1:
-			targetObject = "Van"
-		elif randomisedIndex == 2:
-			targetObject = "Bike"
 			
 		if availableData[0] == "LEFT":
 			initialX = 410
@@ -140,7 +116,7 @@ def spawnRoadObject():
 			initialY = 442
 		
 		arrayData = {
-			"Object": randomisedIndex,
+			"Object": "Car",
 			"Direction": availableData[0],
 			"RoadNumber": availableData[1],
 			"Position": [initialX, initialY]
@@ -151,7 +127,7 @@ def spawnRoadObject():
 		return "Complete"
 	else:
 		return "NOTAVAILABLE"		
-		
+'''
 	
 def handleObjectTick():
 	currentRoadObjectsLen = len(gameData["Obstructions"])
@@ -159,8 +135,7 @@ def handleObjectTick():
 		spawnRoadObject()
 	
 	for objectValue in gameData["Obstructions"]:
-		#mainWindow.blit()
-		print("Vals")
+		print("Do stuff")
 		
 #str var1 << "";
 #std::cin >> var1;
