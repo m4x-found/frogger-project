@@ -9,6 +9,7 @@ codeRunning = True
 rightKeyDown = False
 leftKeyDown = False
 upKeyDown = False
+downKeyDown = False
 
 pygame.init()
 
@@ -30,13 +31,21 @@ gameData = {
 	},
 	
 "Obstructions": {
-"RoadOne": [["Car", ]],
-"RoadTwo": [],
-"RoadThree": [],
-"RoadFour": []
+"RoadOne": [["Car", 0, 310, 1], ["Car", 170, 310, 1]],
+"RoadTwo": [["Car", 0, 349, 4], ["Car", 200, 349, 4], ["Car", 400, 349, 4]],
+"RoadThree": [["Car", 0, 388, 3]],
+"RoadFour": [["Car", 0, 427, 2]]
 },
 "RiverObjects": []
 }
+
+def checkCollisions(objectPosX, objectPosY, objectSizeX, objectSizeY):
+	playerPositionX = gameData["PositionData"]["PlayerPosition"][0]
+	playerPositionY = gameData["PositionData"]["PlayerPosition"][1]
+	if (objectPosX-objectSizeX/1.85) < playerPositionX < (objectPosX+objectSizeX/1.85): # Use smaller than whole size to allow player head room
+		if (objectPosY-objectSizeY/1.85) < playerPositionY < (objectPosY+objectSizeY/1.85):
+			print("Within")
+			return True 
 
 def centreToCornerPos(targetPosX, targetPosY, targetSizeX, targetSizeY):
 	return [targetPosX-(targetSizeX/2), targetPosY-(targetSizeY/2)]
@@ -65,6 +74,13 @@ def uponUpKeyUp():
 	global upKeyDown
 	upKeyDown = False
 
+def uponDownKey():
+	global downKeyDown
+	downKeyDown = True
+
+def uponDownKeyUp():
+	global downKeyDown
+	downKeyDown = False
 
 def leftKeyEnabled():
 	if gameData["PositionData"]["PlayerPosition"][0] > 15 and rightKeyDown == False:
@@ -77,65 +93,21 @@ def rightKeyEnabled():
 def upKeyEnabled():
 	if gameData["PositionData"]["PlayerPosition"][1] > 15:
 		gameData["PositionData"]["PlayerPosition"][1] -= 2
+	
+def downKeyEnabled():
+	if gameData["PositionData"]["PlayerPosition"][1] < 485:
+		gameData["PositionData"]["PlayerPosition"][1] += 2
 
-'''	
-def spawnRoadObject(): # Re code for left direction only --> Function now defunct objects preloaded into arrays
-	# Find available road
-	availableData = ["NIL", "NIL"]
-	objectFound = False
-	# check for empty roads
-	rowFreeArray = [0, 1, 2, 3]
-	rowFreeFinal = None
-	for obstructionArray in gameData["Obstructions"]:
-		if obstructionArray["RoadNumber"] == 0:
-			rowFreeArray[0] == "USED"
-		elif obstructionArray["RoadNumber"] == 1:
-			rowFreeArray[1] == "USED"
-		elif obstructionArray["RoadNumber"] == 2:
-			rowFreeArray[2] == "USED"
-		elif obstructionArray["RoadNumber"] == 3:
-			rowFreeArray[3] == "USED"
-	
-	if availableData[0] != "NIL":
-		randomisedIndex = random.randint(0, 2)
-		initialX = 0
-		targetObject = "Car"
-			
-		if availableData[0] == "LEFT":
-			initialX = 410
-		elif availableData[1] == "RIGHT":
-			initialX = -10
-			
-		if availableData[1] == 0:
-			initialY = 325
-		elif availableData[1] == 1:
-			initialY = 364
-		elif availableData[1] == 2:
-			initialY = 403
-		elif availableData[1] == 3:
-			initialY = 442
-		
-		arrayData = {
-			"Object": "Car",
-			"Direction": availableData[0],
-			"RoadNumber": availableData[1],
-			"Position": [initialX, initialY]
-		}
-		
-		gameData["Obstructions"].append(arrayData)
-		
-		return "Complete"
-	else:
-		return "NOTAVAILABLE"		
-'''
-	
 def handleObjectTick():
-	currentRoadObjectsLen = len(gameData["Obstructions"])
-	if currentRoadObjectsLen < 7:
-		spawnRoadObject()
-	
 	for objectValue in gameData["Obstructions"]:
-		print("Do stuff")
+		for objectArr in gameData["Obstructions"][objectValue]:
+			mainWindow.blit(gameData["Images"]["Car"], (objectArr[1], objectArr[2]))
+			if checkCollisions(objectArr[1], objectArr[2], 50, 37):
+				print("Dead")
+			if objectArr[1] >= 400:
+				objectArr[1] = 0
+			else:
+				objectArr[1] += objectArr[3]
 		
 #str var1 << "";
 #std::cin >> var1;
@@ -151,6 +123,8 @@ while codeRunning:
 				uponRightKey()
 			elif eventValue.key == pygame.K_UP:
 				uponUpKey()
+			elif eventValue.key == pygame.K_DOWN:
+				uponDownKey()
 		elif eventValue.type == pygame.KEYUP:
 			if eventValue.key == pygame.K_LEFT:
 				uponLeftKeyUp()
@@ -158,6 +132,10 @@ while codeRunning:
 				uponRightKeyUp()
 			elif eventValue.key == pygame.K_UP:
 				uponUpKeyUp()
+			elif eventValue.key == pygame.K_DOWN:
+				uponDownKeyUp()
+		elif eventValue.type == pygame.QUIT:
+			exit()
 	
 		
 	if upKeyDown:
@@ -166,6 +144,8 @@ while codeRunning:
 		rightKeyEnabled()
 	if leftKeyDown:
 		leftKeyEnabled()
+	if downKeyDown:
+		downKeyEnabled()
 	
 	# ZIndex 1
 	
@@ -174,10 +154,12 @@ while codeRunning:
 	# ZIndex 2
 	
 	mainWindow.blit(gameData["Images"]["MainBackground"], (0,0))
+	pygame.draw.rect(mainWindow, (0,80,255), pygame.Rect(0, 63, 400, 205))
 	mainWindow.blit(gameData["Images"]["PlayerImage"], (centreToCornerPos(gameData["PositionData"]["PlayerPosition"][0], gameData["PositionData"]["PlayerPosition"][1], 30, 30)))
 	
+	# ZIndex 3
+
 	handleObjectTick()
-	print(gameData["Obstructions"])
 	
 	pygame.display.flip()
 	pygame.time.Clock().tick(60)
