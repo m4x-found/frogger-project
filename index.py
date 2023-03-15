@@ -22,7 +22,8 @@ gameData = {
 "Images": {
 	"MainBackground": pygame.transform.scale(pygame.image.load("Images//UnfinishedBack.png"), (400, 500)),
 	"PlayerImage": pygame.transform.scale(pygame.image.load("Images//froggerwoutback.png"), (30, 30)),
-	"Car": pygame.transform.scale(pygame.image.load("Images//racecar.png"), (50, 37))
+	"Car": pygame.transform.scale(pygame.image.load("Images//racecar.png"), (50, 37)),
+	"Log": pygame.transform.scale(pygame.image.load("Images//log.png"), (120, 35))
 	},
 	
 "PositionData": {
@@ -158,6 +159,12 @@ while codeRunning:
 	mainWindow.blit(gameData["Images"]["PlayerImage"], (centreToCornerPos(gameData["PositionData"]["PlayerPosition"][0], gameData["PositionData"]["PlayerPosition"][1], 30, 30)))
 	
 	# ZIndex 3
+
+	mainWindow.blit(gameData["Images"]["Log"], (0, 73))
+	mainWindow.blit(gameData["Images"]["Log"], (0, 123))
+	mainWindow.blit(gameData["Images"]["Log"], (0, 173))
+	mainWindow.blit(gameData["Images"]["Log"], (0, 223))
+
 
 	handleObjectTick()
 	
