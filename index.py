@@ -156,7 +156,6 @@ while codeRunning:
 	
 	mainWindow.blit(gameData["Images"]["MainBackground"], (0,0))
 	pygame.draw.rect(mainWindow, (0,80,255), pygame.Rect(0, 63, 400, 205))
-	mainWindow.blit(gameData["Images"]["PlayerImage"], (centreToCornerPos(gameData["PositionData"]["PlayerPosition"][0], gameData["PositionData"]["PlayerPosition"][1], 30, 30)))
 	
 	# ZIndex 3
 
@@ -164,7 +163,7 @@ while codeRunning:
 	mainWindow.blit(gameData["Images"]["Log"], (0, 123))
 	mainWindow.blit(gameData["Images"]["Log"], (0, 173))
 	mainWindow.blit(gameData["Images"]["Log"], (0, 223))
-
+	mainWindow.blit(gameData["Images"]["PlayerImage"], (centreToCornerPos(gameData["PositionData"]["PlayerPosition"][0], gameData["PositionData"]["PlayerPosition"][1], 30, 30)))
 
 	handleObjectTick()
 	
