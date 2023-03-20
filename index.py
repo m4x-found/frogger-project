@@ -28,21 +28,21 @@ gameData = {
 	
 "PositionData": {
 	"PlayerPosition": [200,485]
-
 	},
 	
 "Obstructions": {
-"RoadOne": [["Car", 0, 310, 1], ["Car", 170, 310, 1]],
-"RoadTwo": [["Car", 0, 349, 4], ["Car", 200, 349, 4], ["Car", 400, 349, 4]],
-"RoadThree": [["Car", 0, 388, 3]],
-"RoadFour": [["Car", 0, 427, 2]]
-},
+	"RoadOne": [["Car", 0, 310, 1], ["Car", 170, 310, 1]],
+	"RoadTwo": [["Car", 0, 349, 4], ["Car", 200, 349, 4], ["Car", 400, 349, 4]],
+	"RoadThree": [["Car", 0, 388, 3]],
+	"RoadFour": [["Car", 0, 427, 2]]
+	},
+
 "RiverObjects": {	
-"RowOne": [["Log1", 0, 63, 1, False]],
-"RowTwo": [["Log2", 0, 113, -3, False]],
-"RowThree": [["Log3", 0, 163, 4, False]],
-"RowOnFour": [["Log4", 0, 213, -1, False]]
-}
+	"RowOne": [["Log1", 0, 63, 1, False]],
+	"RowTwo": [["Log2", 0, 113, -2, False]],
+	"RowThree": [["Log3", 0, 163, 3, False]],
+	"RowOnFour": [["Log4", 0, 213, -1, False]]
+	}
 }
 
 def checkCollisions(objectPosX, objectPosY, objectSizeX, objectSizeY):
@@ -96,7 +96,7 @@ def rightKeyEnabled():
 		gameData["PositionData"]["PlayerPosition"][0] += 2
 		
 def upKeyEnabled():
-	if gameData["PositionData"]["PlayerPosition"][1] > 15:
+	if gameData["PositionData"]["PlayerPosition"][1] > 70:
 		gameData["PositionData"]["PlayerPosition"][1] -= 2
 	
 def downKeyEnabled():
@@ -175,12 +175,6 @@ while codeRunning:
 	pygame.draw.rect(mainWindow, (0,80,255), pygame.Rect(0, 63, 400, 204))
 	
 	# ZIndex 3
-	'''
-	mainWindow.blit(gameData["Images"]["Log"], (0, 73))
-	mainWindow.blit(gameData["Images"]["Log"], (0, 123))
-	mainWindow.blit(gameData["Images"]["Log"], (0, 173))
-	mainWindow.blit(gameData["Images"]["Log"], (0, 223))
-	'''
 
 	handleObjectTick()
 	
