@@ -23,7 +23,7 @@ gameData = {
 	"MainBackground": pygame.transform.scale(pygame.image.load("Images//UnfinishedBack.png"), (400, 500)),
 	"PlayerImage": pygame.transform.scale(pygame.image.load("Images//froggerwoutback.png"), (30, 30)),
 	"Car": pygame.transform.scale(pygame.image.load("Images//racecar.png"), (50, 37)),
-	"Log": pygame.transform.scale(pygame.image.load("Images//log.png"), (120, 35))
+	"Log": pygame.transform.scale(pygame.image.load("Images//log.png"), (120, 51))
 	},
 	
 "PositionData": {
@@ -37,15 +37,19 @@ gameData = {
 "RoadThree": [["Car", 0, 388, 3]],
 "RoadFour": [["Car", 0, 427, 2]]
 },
-"RiverObjects": []
+"RiverObjects": {	
+"RowOne": [["Log1", 0, 63, 1, False]],
+"RowTwo": [["Log2", 0, 113, 1, False]],
+"RowThree": [["Log3", 0, 163, 1, False]],
+"RowOnFour": [["Log4", 0, 213, 1, False]]
+}
 }
 
 def checkCollisions(objectPosX, objectPosY, objectSizeX, objectSizeY):
 	playerPositionX = gameData["PositionData"]["PlayerPosition"][0]
 	playerPositionY = gameData["PositionData"]["PlayerPosition"][1]
-	if (objectPosX-objectSizeX/1.85) < playerPositionX < (objectPosX+objectSizeX/1.85): # Use smaller than whole size to allow player head room
-		if (objectPosY-objectSizeY/1.85) < playerPositionY < (objectPosY+objectSizeY/1.85):
-			print("Within")
+	if (objectPosX) < playerPositionX < (objectPosX+objectSizeX): # Use smaller than whole size to allow player head room
+		if (objectPosY) < playerPositionY < (objectPosY+objectSizeY):
 			return True 
 
 def centreToCornerPos(targetPosX, targetPosY, targetSizeX, targetSizeY):
@@ -104,9 +108,19 @@ def handleObjectTick():
 		for objectArr in gameData["Obstructions"][objectValue]:
 			mainWindow.blit(gameData["Images"]["Car"], (objectArr[1], objectArr[2]))
 			if checkCollisions(objectArr[1], objectArr[2], 50, 37):
-				print("Dead")
+				return "Dead"
 			if objectArr[1] >= 400:
 				objectArr[1] = 0
+			else:
+				objectArr[1] += objectArr[3]
+
+	for objectValue in gameData["RiverObjects"]:
+		for objectArr in gameData["RiverObjects"][objectValue]:
+			mainWindow.blit(gameData["Images"]["Log"], (objectArr[1], objectArr[2]))
+			if checkCollisions(objectArr[1], objectArr[2], 120, 51):
+				gameData["PositionData"]["PlayerPosition"][0] += objectArr[3]
+			if objectArr[1] >= 400:
+				objectArr[1] = -120
 			else:
 				objectArr[1] += objectArr[3]
 		
@@ -155,18 +169,20 @@ while codeRunning:
 	# ZIndex 2
 	
 	mainWindow.blit(gameData["Images"]["MainBackground"], (0,0))
-	pygame.draw.rect(mainWindow, (0,80,255), pygame.Rect(0, 63, 400, 205))
+	pygame.draw.rect(mainWindow, (0,80,255), pygame.Rect(0, 63, 400, 204))
 	
 	# ZIndex 3
-
+	'''
 	mainWindow.blit(gameData["Images"]["Log"], (0, 73))
 	mainWindow.blit(gameData["Images"]["Log"], (0, 123))
 	mainWindow.blit(gameData["Images"]["Log"], (0, 173))
 	mainWindow.blit(gameData["Images"]["Log"], (0, 223))
-	mainWindow.blit(gameData["Images"]["PlayerImage"], (centreToCornerPos(gameData["PositionData"]["PlayerPosition"][0], gameData["PositionData"]["PlayerPosition"][1], 30, 30)))
+	'''
 
 	handleObjectTick()
 	
+	mainWindow.blit(gameData["Images"]["PlayerImage"], (centreToCornerPos(gameData["PositionData"]["PlayerPosition"][0], gameData["PositionData"]["PlayerPosition"][1], 30, 30)))
+
 	pygame.display.flip()
 	pygame.time.Clock().tick(60)
 	
