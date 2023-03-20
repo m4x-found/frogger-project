@@ -29,6 +29,12 @@ gameData = {
 "PositionData": {
 	"PlayerPosition": [200,485]
 	},
+
+"SlotFilled": {
+	"One": False,
+	"Two": False,
+	"Three": False
+	},
 	
 "Obstructions": {
 	"RoadOne": [["Car", 0, 310, 1], ["Car", 170, 310, 1]],
@@ -126,11 +132,28 @@ def handleObjectTick():
 				if objectArr[1] <= -120:
 					objectArr[1] = 400
 			objectArr[1] += objectArr[3]
-		
-#str var1 << "";
-#std::cin >> var1;
-#std::cout << "\n";
-#std::cout << var1;
+	
+	if gameData["PositionData"]["PlayerPosition"][1] <= 70:
+		print("Handle end game")
+		if 125 > gameData["PositionData"]["PlayerPosition"][0] > 75:
+			if gameData["SlotFilled"]["One"] == False:
+				gameData["PositionData"]["PlayerPosition"] = [200, 485]
+				gameData["SlotFilled"]["One"] = True
+		elif 225 > gameData["PositionData"]["PlayerPosition"][0] > 175:
+			if gameData["SlotFilled"]["Two"] == False:
+				gameData["PositionData"]["PlayerPosition"] = [200, 485]
+				gameData["SlotFilled"]["Two"] = True
+		elif 325 > gameData["PositionData"]["PlayerPosition"][0] > 275:
+			if gameData["SlotFilled"]["Three"] == False:
+				gameData["PositionData"]["PlayerPosition"] = [200, 485]
+				gameData["SlotFilled"]["Three"] = True
+
+	if gameData["SlotFilled"]["One"]:
+		mainWindow.blit(gameData["Images"]["PlayerImage"], centreToCornerPos(93, 40, 30, 30))
+	if gameData["SlotFilled"]["Two"]:
+		mainWindow.blit(gameData["Images"]["PlayerImage"], centreToCornerPos(200, 40, 30, 30))
+	if gameData["SlotFilled"]["Three"]:
+		mainWindow.blit(gameData["Images"]["PlayerImage"], centreToCornerPos(307, 40, 30, 30))
 
 while codeRunning:
 	for eventValue in pygame.event.get():
