@@ -39,9 +39,9 @@ gameData = {
 },
 "RiverObjects": {	
 "RowOne": [["Log1", 0, 63, 1, False]],
-"RowTwo": [["Log2", 0, 113, 1, False]],
-"RowThree": [["Log3", 0, 163, 1, False]],
-"RowOnFour": [["Log4", 0, 213, 1, False]]
+"RowTwo": [["Log2", 0, 113, -3, False]],
+"RowThree": [["Log3", 0, 163, 4, False]],
+"RowOnFour": [["Log4", 0, 213, -1, False]]
 }
 }
 
@@ -119,10 +119,13 @@ def handleObjectTick():
 			mainWindow.blit(gameData["Images"]["Log"], (objectArr[1], objectArr[2]))
 			if checkCollisions(objectArr[1], objectArr[2], 120, 51):
 				gameData["PositionData"]["PlayerPosition"][0] += objectArr[3]
-			if objectArr[1] >= 400:
-				objectArr[1] = -120
-			else:
-				objectArr[1] += objectArr[3]
+			if objectArr[3] >= 1:
+				if objectArr[1] >= 400:
+					objectArr[1] = -120
+			elif objectArr[3] <= -1:
+				if objectArr[1] <= -120:
+					objectArr[1] = 400
+			objectArr[1] += objectArr[3]
 		
 #str var1 << "";
 #std::cin >> var1;
