@@ -5,6 +5,7 @@ import random
 # General bools
 gameRunning = True
 codeRunning = True
+gameWon = False
 
 rightKeyDown = False
 leftKeyDown = False
@@ -12,6 +13,9 @@ upKeyDown = False
 downKeyDown = False
 
 pygame.init()
+pygame.font.init()
+defaultFont = pygame.font.SysFont("Comic Sans MS", 30)
+
 
 width = 400
 height = 500
@@ -156,6 +160,7 @@ def handleObjectTick():
 		mainWindow.blit(gameData["Images"]["PlayerImage"], centreToCornerPos(307, 40, 30, 30))
 
 while codeRunning:
+
 	for eventValue in pygame.event.get():
 		if eventValue.type == pygame.KEYDOWN:
 			if eventValue.key == pygame.K_LEFT:
@@ -176,33 +181,52 @@ while codeRunning:
 			elif eventValue.key == pygame.K_DOWN:
 				uponDownKeyUp()
 		elif eventValue.type == pygame.QUIT:
-			exit()
-	
-		
-	if upKeyDown:
-		upKeyEnabled()
-	if rightKeyDown:
-		rightKeyEnabled()
-	if leftKeyDown:
-		leftKeyEnabled()
-	if downKeyDown:
-		downKeyEnabled()
-	
-	# ZIndex 1
-	
-	mainWindow.fill((0,0,0))
-	
-	# ZIndex 2
-	
-	mainWindow.blit(gameData["Images"]["MainBackground"], (0,0))
-	pygame.draw.rect(mainWindow, (0,80,255), pygame.Rect(0, 63, 400, 204))
-	
-	# ZIndex 3
+				exit()
 
-	handleObjectTick()
-	
-	mainWindow.blit(gameData["Images"]["PlayerImage"], (centreToCornerPos(gameData["PositionData"]["PlayerPosition"][0], gameData["PositionData"]["PlayerPosition"][1], 30, 30)))
+	if gameWon != True and gameRunning == True:
+		if upKeyDown:
+			upKeyEnabled()
+		if rightKeyDown:
+			rightKeyEnabled()
+		if leftKeyDown:
+			leftKeyEnabled()
+		if downKeyDown:
+			downKeyEnabled()
+		
+		# ZIndex 1
+		
+		mainWindow.fill((0,0,0))
+		
+		# ZIndex 2
+		
+		mainWindow.blit(gameData["Images"]["MainBackground"], (0,0))
+		pygame.draw.rect(mainWindow, (0,80,255), pygame.Rect(0, 63, 400, 204))
+		
+		# ZIndex 3
+
+		handleObjectTick()
+		
+		mainWindow.blit(gameData["Images"]["PlayerImage"], (centreToCornerPos(gameData["PositionData"]["PlayerPosition"][0], gameData["PositionData"]["PlayerPosition"][1], 30, 30)))
+
+	elif gameWon == True and gameRunning == False:
+
+		pygame.draw.rect(mainWindow, (0, 0, 0), pygame.Rect(0, 0, 400, 500))
+		textSurface = defaultFont.render("Game Over", False, (255, 255, 255))
+		mainWindow.blit(textSurface, (125, 225))
+
+	elif gameWon == False and gameRunning == False:
+
+		pygame.draw.rect(mainWindow, (0, 0, 0), pygame.Rect(0, 0, 400, 500))		
+
+
+
+	# Post processes
+
+	# Game won
+
+	if gameData["SlotFilled"]["One"] and gameData["SlotFilled"]["Two"] and gameData["SlotFilled"]["Three"]:
+		gameWon = True
+		gameRunning = False
 
 	pygame.display.flip()
 	pygame.time.Clock().tick(60)
-	
